@@ -5,9 +5,6 @@ import sib_api_v3_sdk
 from sib_api_v3_sdk.rest import ApiException
 from decouple import config
 from django.conf import settings
-from .tasks import send_mail_trigger
-import json
-from celery.result import AsyncResult
 
 root_path = settings.BASE_DIR
 
@@ -48,6 +45,16 @@ def configure_email():
     return api_instance
 
 
+def send_mail_trigger(recipient_email, otp_generated):
+    subject = f'Email Verification code {otp_generated}'
+    html_content = f'your verfication is {otp_generated}'      
+    sender = {"name":"Team Thoughtwin","email":"aashutosh4536@gmail.com"}
+    to = [{"email":f"{recipient_email}"}]
+    headers = {"Some-Custom-Name":"unique-id-1234"}
+    send_email=sib_api_v3_sdk.SendSmtpEmail(to=to, headers=headers, html_content=html_content, sender=sender, subject=subject)
+    return send_email
+
+
 def send_email(instance, otp_value):
         """Function to send mail via sendinblue platform"""
 
@@ -62,6 +69,7 @@ def send_email(instance, otp_value):
             if api_response:
                 Response.objects.create(response='Message sent Successfully', email = recipient_email)
             else:
+                print("Not Done")
                 Response.objects.create(response='Failed', email = recipient_email)
         except ApiException as e:
             Response.objects.create(response = e.body, email = recipient_email)
