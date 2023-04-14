@@ -4,7 +4,6 @@ import json
 
 @shared_task(bind=True)
 def send_mail_trigger(self,recipient_email, otp_generated):
-    print(recipient_email,otp_generated,"^^^^^^^^^^^^^^^^^^^^^^&&&&&&&&&&&&&")
     subject = f'Email Verification code {otp_generated}'
     html_content = f'your verfication is {otp_generated}'      
     sender = {"name":"Team Thoughtwin","email":"aashutosh4536@gmail.com"}
