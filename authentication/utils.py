@@ -15,11 +15,14 @@ API_KEY = config('API_KEY')
 
 
 def generate_otp():
+    """OTP genration """
     otp_generate = random.randint(100000, 999999)
     return otp_generate
 
 
 def validate_otp(entered_otp, otp_in_session):
+    """Validate OTP"""
+
     if entered_otp == otp_in_session:
         return True
     else:
@@ -27,6 +30,8 @@ def validate_otp(entered_otp, otp_in_session):
 
 
 def is_otp_expired(otp_created_time):
+    """Checks if OTP is expired or not"""
+
     current_time = int(time.time())
     if current_time - otp_created_time > 60:
         return True
@@ -35,17 +40,17 @@ def is_otp_expired(otp_created_time):
 
 
 def configure_email():
+    """Email Configuration"""
+
     configuration = sib_api_v3_sdk.Configuration()
     configuration.api_key['api-key'] = API_KEY
     api_instance = sib_api_v3_sdk.TransactionalEmailsApi(sib_api_v3_sdk.ApiClient(configuration))
     return api_instance
 
 
-
-
-
-
 def send_email(instance, otp_value):
+        """Function to send mail via sendinblue platform"""
+
         recipient_email = instance.user_email
         otp_generated = otp_value
         api_instance = configure_email()

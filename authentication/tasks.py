@@ -1,6 +1,5 @@
 from celery import shared_task  
 import sib_api_v3_sdk
-import json
 
 @shared_task(bind=True)
 def send_mail_trigger(self,recipient_email, otp_generated):
