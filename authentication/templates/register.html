@@ -1,0 +1,136 @@
+<html><head>
+    <title>Django and Twilio Verify Demo</title>
+    <style>
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: 'Poppins', sans-serif;
+            }
+
+            body {
+                background: #ecf0f3;
+            }
+
+            .wrapper {
+                max-width: 350px;
+                min-height: 500px;
+                margin: 80px auto;
+                padding: 40px 30px 30px 30px;
+                background-color: #ecf0f3;
+                border-radius: 15px;
+                box-shadow: 13px 13px 20px #cbced1, -13px -13px 20px #fff;
+            }
+
+            .logo {
+                width: 80px;
+                margin: auto;
+            }
+
+            .logo img {
+                width: 100%;
+                height: 80px;
+                object-fit: cover;
+                border-radius: 50%;
+                box-shadow: 0px 0px 3px #5f5f5f,
+                    0px 0px 0px 5px #ecf0f3,
+                    8px 8px 15px #a7aaa7,
+                    -8px -8px 15px #fff;
+            }
+
+            .wrapper .name {
+                font-weight: 600;
+                font-size: 1.4rem;
+                letter-spacing: 1.3px;
+                padding-left: 10px;
+                color: #555;
+            }
+
+            .wrapper .form-field input {
+                width: 100%;
+                display: block;
+                border: none;
+                outline: none;
+                background: none;
+                font-size: 1.2rem;
+                color: #666;
+                padding: 10px 15px 10px 10px;
+                /* border: 1px solid red; */
+            }
+
+            .wrapper .form-field {
+                padding-left: 10px;
+                margin-bottom: 20px;
+                border-radius: 20px;
+                box-shadow: inset 8px 8px 8px #cbced1, inset -8px -8px 8px #fff;
+            }
+
+            .wrapper .form-field .fas {
+                color: #555;
+            }
+
+            .wrapper .btn {
+                box-shadow: none;
+                width: 100%;
+                height: 40px;
+                background-color: #03A9F4;
+                color: #fff;
+                border-radius: 25px;
+                box-shadow: 3px 3px 3px #b1b1b1,
+                    -3px -3px 3px #fff;
+                letter-spacing: 1.3px;
+            }
+
+            .wrapper .btn:hover {
+                background-color: #039BE5;
+            }
+
+            .wrapper a {
+                text-decoration: none;
+                font-size: 0.8rem;
+                color: #03A9F4;
+            }
+
+            .wrapper a:hover {
+                color: #039BE5;
+            }
+
+            @media(max-width: 380px) {
+                .wrapper {
+                    margin: 30px 20px;
+                    padding: 40px 15px 15px 15px;
+                }
+            }
+
+    </style>
+        
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+    <body>
+        <div class="wrapper">
+            <div class="logo">
+                <img src="data:image/jpeg;base64,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" alt="">
+            </div>
+            <div class="text-center mt-4 name">
+                Registration Form 
+            </div>
+            <form class="p-3 mt-3" method="POST">
+                <input type="hidden" name="csrfmiddlewaretoken" value="gCUBaL1AbF4C9FGlhbys2mJGVxJCYZGItqn9KmHYRLuWv8vOpjQJMEmXeUFqRNGv">
+                <div class="form-field d-flex align-items-center">
+                    <span class="fas fa-key"></span>
+                    <input type="email" name="userEmail" id="userEmail" placeholder="Your Email">
+                </div>
+                <button class="btn mt-3">Register</button>
+            </form>
+        </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    
+
+</body></html>
